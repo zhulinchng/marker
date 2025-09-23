@@ -122,10 +122,6 @@ Respond only with the JSON schema, nothing else.  Do not include ```json, ```,  
         for tries in range(1, total_tries + 1):
             try:
                 response = client.chat.completions.create(
-                    extra_headers={
-                        "X-Title": "Marker",
-                        "HTTP-Referer": "https://github.com/datalab-to/marker",
-                    },
                     model=self.databricks_claude_model,
                     messages=messages,
                     timeout=timeout,
