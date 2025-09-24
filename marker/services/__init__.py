@@ -13,8 +13,8 @@ class BaseService:
     timeout: Annotated[int, "The timeout to use for the service."] = 30
     max_retries: Annotated[
         int, "The maximum number of retries to use for the service."
-    ] = 6
-    retry_wait_time: Annotated[int, "The wait time between retries."] = 12
+    ] = 8
+    retry_wait_time: Annotated[int, "The wait time between retries."] = 16
     max_output_tokens: Annotated[
         int, "The maximum number of output tokens to generate."
     ] = None
