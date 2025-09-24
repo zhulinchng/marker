@@ -27,6 +27,9 @@ class DatabricksClaudeService(BaseService):
         str,
         "The image format to use for the OpenAI-like service. Use 'png' for better compatability",
     ] = "webp"
+    rate_limit_fail: Annotated[
+        bool, "Whether to fail on rate limit errors instead of waiting."
+    ] = False
 
     def process_images(self, images: List[Image.Image]) -> List[dict]:
         """
@@ -136,6 +139,8 @@ Respond only with the JSON schema, nothing else.  Do not include ```json, ```,  
             except (APITimeoutError, RateLimitError) as e:
                 # Rate limit exceeded
                 if tries == total_tries:
+                    if self.rate_limit_fail:
+                        raise e
                     # Last attempt failed. Give up
                     logger.error(
                         f"Rate limit error: {e}. Max retries reached. Giving up. (Attempt {tries}/{total_tries})",

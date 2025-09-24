@@ -82,6 +82,12 @@ class ConfigParser:
             default=None,
             help="LLM service to use - should be full import path, like marker.services.gemini.GoogleGeminiService",
         )(fn)
+        fn = click.option(
+            "--rate_limit_fail",
+            is_flag=True,
+            default=False,
+            help="Fail on rate limit errors instead of waiting.",
+        )(fn)
         return fn
 
     def generate_config_dict(self) -> Dict[str, any]:
@@ -106,6 +112,8 @@ class ConfigParser:
                     config["pdftext_workers"] = 1
                 case "disable_image_extraction":
                     config["extract_images"] = False
+                case "rate_limit_fail":
+                    config["rate_limit_fail"] = v
                 case _:
                     if k in crawler.attr_set:
                         config[k] = v

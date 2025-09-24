@@ -25,6 +25,7 @@ import traceback
 
 import click
 import torch.multiprocessing as mp
+from openai import RateLimitError
 from tqdm import tqdm
 import gc
 
@@ -93,6 +94,10 @@ def process_single_pdf(args):
             logger.debug(f"Converted {fpath}")
         del rendered
         del converter
+    except RateLimitError as e:
+        logger.error(f"Rate limit error converting {fpath}: {e}")
+        with open(f"{fpath}.log", "w") as f:
+            f.write(str(e))
     except Exception as e:
         logger.error(f"Error converting {fpath}: {e}")
         traceback.print_exc()
